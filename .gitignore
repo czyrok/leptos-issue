@@ -1,0 +1,14 @@
+# Rust
+target/
+
+# Dependency directories
+node_modules/
+
+# Environment variables file
+.env*.local
+
+# System Files
+.DS_Store
+
+# Others
+local.db*
