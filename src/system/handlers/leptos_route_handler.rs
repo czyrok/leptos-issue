@@ -14,6 +14,11 @@ pub async fn leptos_routes_handler(
 ) -> Response {
     let handler = leptos_axum::render_app_to_stream_with_context(
         move || {
+            provide_context(app_state.environment.clone());
+            provide_context(app_state.project_service.clone());
+            provide_context(app_state.project_context_service.clone());
+            provide_context(app_state.project_slug_service.clone());
+            provide_context(app_state.project_tag_service.clone());
         },
         move || shell(app_state.options.clone()),
     );

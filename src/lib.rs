@@ -1,8 +1,9 @@
 pub mod app;
+pub mod core;
 pub mod landing_page;
+pub mod project;
 pub mod shared;
 pub mod system;
-pub mod core;
 
 #[cfg(feature = "hydrate")]
 #[wasm_bindgen::prelude::wasm_bindgen]

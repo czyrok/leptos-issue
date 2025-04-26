@@ -1,8 +1,9 @@
 mod app;
+mod core;
 mod landing_page;
+mod project;
 mod shared;
 mod system;
-mod core;
 
 use cfg_if::cfg_if;
 
@@ -19,11 +20,23 @@ if #[cfg(feature = "ssr")] {
     use system::handlers::file_and_error_handler::file_and_error_handler;
     use system::route::static_route_generator::get_static_route_generator;
     use system::handlers::{server_function_handler::server_function_handler, leptos_route_handler::leptos_routes_handler};
+    use project::use_cases::make_system_project_cache_loading_use_case::MakeSystemProjectCacheLoadingUseCase;
+    use core::behaviors::use_case::UseCase;
+    use system::state::environment_context::EnvironmentContext;
 
     fn get_app_state() -> Result<AppState, Box<dyn Error>> {
+        let environment = EnvironmentContext::load_environment()?;
         let configuration = get_configuration(None)?;
 
-        Ok(AppState::new(configuration.leptos_options))
+        Ok(AppState::new(environment, configuration.leptos_options))
+    }
+
+    async fn refresh_project_cache(app_state: AppState) -> Result<(), Box<dyn Error>> {
+        let mut use_case = MakeSystemProjectCacheLoadingUseCase::new(app_state.environment, app_state.project_service);
+
+        use_case.run(()).await?;
+
+        Ok(())
     }
 
     async fn serve_leptos(app_state: AppState) {
@@ -53,6 +66,8 @@ if #[cfg(feature = "ssr")] {
     #[tokio::main]
     async fn main() -> Result<(), Box<dyn Error>> {
         let app_state = get_app_state()?;
+
+        refresh_project_cache(app_state.clone()).await?;
 
         serve_leptos(app_state).await;
 

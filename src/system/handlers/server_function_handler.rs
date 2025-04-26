@@ -18,7 +18,12 @@ pub async fn server_function_handler(
 
     handle_server_fns_with_context(
         move || {
+            provide_context(app_state.environment.clone());
             provide_context(app_state.options.clone());
+            provide_context(app_state.project_service.clone());
+            provide_context(app_state.project_context_service.clone());
+            provide_context(app_state.project_slug_service.clone());
+            provide_context(app_state.project_tag_service.clone());
         },
         request,
     )

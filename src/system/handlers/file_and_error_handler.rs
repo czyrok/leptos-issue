@@ -9,7 +9,10 @@ use tower::ServiceExt;
 use tower_http::services::{fs::ServeFileSystemResponseBody, ServeDir};
 
 use super::leptos_route_handler::leptos_routes_handler;
-use crate::system::state::app_state::AppState;
+use crate::{
+    shared::layouts::not_found_error_page_layout::NotFoundErrorPageLayout,
+    system::state::app_state::AppState,
+};
 
 pub async fn file_and_error_handler(
     uri: Uri,

@@ -1,3 +1,3 @@
+pub mod components;
+pub mod resources;
 pub mod view;
-pub mod section;
-pub mod theme_selector;
